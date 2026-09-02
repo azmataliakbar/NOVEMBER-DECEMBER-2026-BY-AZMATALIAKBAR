@@ -692,6 +692,15 @@ body {
     font-size: 1rem;
   }
 
+  /* Push "2026" title below the clock on tiny screens so they don't overlap */
+  .main-title {
+    margin-top: 3.25rem;
+  }
+
+  .main-title h1 {
+    font-size: clamp(1.75rem, 12vw, 3rem);
+  }
+
   .calendar-card {
     padding: var(--spacing-sm);
   }
@@ -731,6 +740,15 @@ body {
 @media (min-width: 360px) and (max-width: 479px) {
   .clock-time {
     font-size: 1.25rem;
+  }
+
+  /* Push "2026" title below the clock so they don't overlap on small phones */
+  .main-title {
+    margin-top: 3.5rem;
+  }
+
+  .main-title h1 {
+    font-size: clamp(2.25rem, 11vw, 3.5rem);
   }
 
   .calendar-day {
