@@ -1,0 +1,882 @@
+/* ===================================
+   2026 Neon Calendar - Futuristic Design
+   =================================== */
+
+/* CSS Custom Properties */
+:root {
+  /* Neon Colors */
+  --neon-blue: #00d4ff;
+  --neon-red: #ff3366;
+  --neon-green: #00ff88;
+  --neon-purple: #cc66ff;
+
+  /* Background & Surface */
+  --bg-dark: #0a0a12;
+  --bg-card: #12121f;
+  --bg-cell: #ffffff;
+
+  /* Text Colors */
+  --text-dark: #1a1a2e;
+  --text-muted: #666688;
+
+  /* Glow effects */
+  --glow-blue: 0 0 20px #00d4ff, 0 0 40px #00d4ff40;
+  --glow-red: 0 0 20px #ff3366, 0 0 40px #ff336640;
+  --glow-green: 0 0 20px #00ff88, 0 0 40px #00ff8840;
+  --glow-purple: 0 0 20px #cc66ff, 0 0 40px #cc66ff40;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+
+  /* Animation timing */
+  --anim-slow: 3s;
+  --anim-medium: 2s;
+  --anim-fast: 1s;
+
+  /* Fonts */
+  --font-main: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-calligraphy: 'Brush Script MT', 'Lucida Handwriting', cursive;
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--bg-dark);
+  background-image:
+    radial-gradient(ellipse at top, #1a1a2e 0%, transparent 50%),
+    radial-gradient(ellipse at bottom, #0a0a12 0%, var(--bg-dark) 100%);
+  min-height: 100vh;
+  color: #e0e0f0;
+  overflow-x: hidden;
+  padding: var(--spacing-md);
+  padding-bottom: 5rem;
+}
+
+/* ===================================
+   Clock
+   =================================== */
+.clock {
+  position: fixed;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  text-align: right;
+  z-index: 100;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(10, 10, 18, 0.8);
+  border: 1px solid var(--neon-purple);
+  border-radius: var(--radius-md);
+  box-shadow: var(--glow-purple);
+  animation: pulse-purple var(--anim-slow) ease-in-out infinite;
+}
+
+.clock-date {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--neon-purple);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.clock-time {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--neon-purple);
+  text-shadow: var(--glow-purple);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===================================
+   Main Title
+   =================================== */
+.main-title {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+}
+
+.main-title h1 {
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 900;
+  color: var(--neon-blue);
+  /* text-shadow: var(--glow-blue); */
+  text-shadow: 0 0 2px var(--neon-blue), 0 0 2px rgba(0, 212, 255, 0.5);
+  animation: pulse-red var(--anim-slow) ease-in-out infinite;
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+/* ===================================
+   Calendar Container
+   =================================== */
+.calendar-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  max-width: 1200px;
+  margin: 0 auto var(--spacing-xl);
+}
+
+@media (max-width: 900px) {
+  .calendar-container {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+/* ===================================
+   Calendar Card
+   =================================== */
+.calendar-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.calendar-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  padding: 2px;
+  background: linear-gradient(135deg, var(--neon-red), var(--neon-green));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: border-pulse var(--anim-slow) ease-in-out infinite;
+}
+
+
+/* ===================================
+   Calendar Header
+   =================================== */
+.calendar-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.month-title {
+  display: block;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.november .month-title {
+  color: var(--neon-red);
+  /* text-shadow: var(--glow-red); */
+  text-shadow: 0 0 2px var(--neon-red), 0 0 2px rgba(255, 51, 102, 0.5);
+  /* animation: pulse-green var(--anim-slow) ease-in-out infinite; */
+}
+
+.december .month-title {
+  color: var(--neon-green);
+  /* text-shadow: var(--glow-green); */
+  text-shadow: 0 0 2px var(--neon-green), 0 0 2px rgba(0, 255, 136, 0.5);
+  /* animation: pulse-green var(--anim-slow) ease-in-out infinite; */
+}
+
+.month, .year {
+  display: none;
+}
+
+/* ===================================
+   Calendar Grid
+   =================================== */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+}
+
+.weekday-header {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-align: center;
+  padding: var(--spacing-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-cell);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  color: var(--text-dark);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.calendar-day .note-dot {
+  display: none;
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.calendar-day.has-note .note-dot {
+  display: block;
+}
+
+.calendar-card.november .calendar-day.has-note .note-dot {
+  background: var(--neon-red);
+  box-shadow: 0 0 4px var(--neon-red), 0 0 8px rgba(255, 51, 102, 0.5);
+  animation: blink-red var(--anim-slow) ease-in-out infinite;
+}
+
+.calendar-card.december .calendar-day.has-note .note-dot {
+  background: var(--neon-green);
+  box-shadow: 0 0 4px var(--neon-green), 0 0 8px rgba(0, 255, 136, 0.5);
+  animation: blink-green var(--anim-slow) ease-in-out infinite;
+}
+
+.calendar-day:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-day.current-month {
+  background: var(--bg-cell);
+}
+
+.calendar-day.other-month {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.calendar-day.today {
+  background: linear-gradient(135deg, #f0f8ff, #e0f4ff);
+  box-shadow: inset 0 0 0 2px var(--neon-blue), 0 0 8px rgba(0, 212, 255, 0.4);
+  color: #003366;
+  font-weight: 900;
+}
+
+/* ===================================
+   Notes Indicator (Calendar)
+   =================================== */
+.notes-indicator {
+  display: none;
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  z-index: 10;
+}
+
+.notes-indicator.active {
+  display: block;
+}
+
+.notes-indicator .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+}
+
+.november-indicator .dot {
+  background: var(--neon-red);
+  box-shadow: var(--glow-red);
+  animation: blink-red var(--anim-slow) ease-in-out infinite;
+}
+
+.december-indicator .dot {
+  background: var(--neon-green);
+  box-shadow: var(--glow-green);
+  animation: blink-green var(--anim-slow) ease-in-out infinite;
+}
+
+/* ===================================
+   Notes Sidebar
+   =================================== */
+.notes-sidebar {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e0e0f0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sidebar-section {
+  flex: 1;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: #c0c0d0;
+}
+
+.november-notes .section-label {
+  color: var(--neon-red);
+}
+
+.december-notes .section-label {
+  color: var(--neon-green);
+}
+
+.notes-area {
+  min-height: 60px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.note-placeholder {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-style: italic;
+  text-align: center;
+  padding: var(--spacing-sm);
+}
+
+.note-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-xs);
+  font-size: 0.9rem;
+  color: #e0e0f0;
+}
+
+.note-item:last-child {
+  margin-bottom: 0;
+}
+
+.note-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.note-date-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  padding: 1px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.november-notes .note-date-tag {
+  background: rgba(255, 51, 102, 0.15);
+  color: var(--neon-red);
+  border: 1px solid rgba(255, 51, 102, 0.3);
+}
+
+.december-notes .note-date-tag {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--neon-green);
+  border: 1px solid rgba(0, 255, 136, 0.25);
+}
+
+.note-text {
+  flex: 1;
+  word-break: break-word;
+}
+
+.note-delete {
+  background: transparent;
+  border: none;
+  color: #ff6666;
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.note-delete:hover {
+  background: rgba(255, 102, 102, 0.2);
+}
+
+.notes-input-area {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.notes-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  color: #e0e0f0;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  min-height: 2.5rem;
+  transition: border-color 0.2s;
+}
+
+.notes-input::placeholder {
+  color: #9a9a9a;
+  font-style: italic;
+  opacity: 1;
+}
+
+.notes-input:focus {
+  outline: none;
+  border-color: var(--neon-purple);
+}
+
+.add-note-btn {
+  background: linear-gradient(135deg, var(--neon-purple), #9966cc);
+  border: none;
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.add-note-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 10px rgba(204, 102, 255, 0.4);
+}
+
+.add-note-btn:active {
+  transform: translateY(0);
+}
+
+/* ===================================
+   Signature
+   =================================== */
+.signature {
+  position: fixed;
+  bottom: var(--spacing-md);
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  animation: pulse-gray var(--anim-slow) ease-in-out infinite;
+}
+
+.signature p {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.signature-name {
+  font-family: var(--font-calligraphy);
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  color: #888899;
+  text-shadow: 0 0 10px rgba(136, 136, 153, 0.5);
+}
+
+.signature-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ===================================
+   Animations
+   =================================== */
+@keyframes pulse-blue {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 20px #00d4ff, 0 0 40px #00d4ff40;
+  }
+  50% {
+    opacity: 0.85;
+    text-shadow: 0 0 30px #00d4ff, 0 0 60px #00d4ff60;
+  }
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 15px #ff3366, 0 0 30px #ff336640;
+  }
+  50% {
+    opacity: 0.9;
+    text-shadow: 0 0 25px #ff3366, 0 0 50px #ff336660;
+  }
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 15px #00ff88, 0 0 30px #00ff8840;
+  }
+  50% {
+    opacity: 0.9;
+    text-shadow: 0 0 25px #00ff88, 0 0 50px #00ff8860;
+  }
+}
+
+@keyframes pulse-purple {
+  0%, 100% {
+    box-shadow: 0 0 15px #cc66ff, 0 0 30px #cc66ff40;
+    border-color: #cc66ff;
+  }
+  50% {
+    box-shadow: 0 0 25px #cc66ff, 0 0 50px #cc66ff60;
+    border-color: #dd88ff;
+  }
+}
+
+@keyframes pulse-gray {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes blink-red {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 10px #ff3366, 0 0 20px #ff336640;
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 5px #ff3366, 0 0 10px #ff336620;
+  }
+}
+
+@keyframes blink-green {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff8840;
+  }
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 5px #00ff88, 0 0 10px #00ff8820;
+  }
+}
+
+@keyframes border-pulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ===================================
+   Reduced Motion
+   =================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .clock {
+    animation: none;
+  }
+
+  .main-title h1 {
+    animation: none;
+  }
+
+  .november .month-title {
+    animation: none;
+  }
+
+  .december .month-title {
+    animation: none;
+  }
+
+  .calendar-card::before {
+    animation: none;
+  }
+
+  .signature {
+    animation: none;
+  }
+
+  .notes-indicator .dot {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ===================================
+   Responsive Design
+   =================================== */
+
+/* Extra small devices (270px - 359px) */
+@media (max-width: 359px) {
+  body {
+    padding: var(--spacing-sm);
+    padding-bottom: 4rem;
+  }
+
+  .clock {
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
+    padding: var(--spacing-xs);
+  }
+
+  .clock-date {
+    font-size: 0.55rem;
+  }
+
+  .clock-time {
+    font-size: 1rem;
+  }
+
+  .calendar-card {
+    padding: var(--spacing-sm);
+  }
+
+  .calendar-grid {
+    padding: 2px;
+    gap: 1px;
+  }
+
+  .weekday-header {
+    font-size: 0.5rem;
+    padding: 1px;
+  }
+
+  .calendar-day {
+    font-size: 0.65rem;
+  }
+
+  .notes-sidebar {
+    padding: var(--spacing-sm);
+  }
+
+  .notes-input-area {
+    flex-direction: column;
+  }
+
+  .add-note-btn {
+    width: 100%;
+  }
+
+  .signature-name {
+    font-size: 1.25rem;
+  }
+}
+
+/* Small devices (360px - 479px) */
+@media (min-width: 360px) and (max-width: 479px) {
+  .clock-time {
+    font-size: 1.25rem;
+  }
+
+  .calendar-day {
+    font-size: 0.8rem;
+  }
+
+  .notes-input-area {
+    flex-direction: column;
+  }
+
+  .add-note-btn {
+    width: 100%;
+  }
+}
+
+/* Medium devices (480px - 767px) */
+@media (min-width: 480px) and (max-width: 767px) {
+  .calendar-day {
+    font-size: 0.9rem;
+  }
+
+  .notes-input-area {
+    flex-direction: column;
+  }
+
+  .add-note-btn {
+    width: 100%;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .calendar-container {
+    gap: var(--spacing-xl);
+  }
+
+  .calendar-grid {
+    gap: 4px;
+    padding: var(--spacing-md);
+  }
+
+  .weekday-header {
+    font-size: 0.75rem;
+  }
+
+  .calendar-day {
+    font-size: 1rem;
+  }
+}
+
+/* Large screens (1024px+) */
+@media (min-width: 1024px) {
+  .calendar-container {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  .calendar-card {
+    padding: var(--spacing-xl);
+  }
+
+  .calendar-grid {
+    gap: 6px;
+    padding: var(--spacing-lg);
+  }
+
+  .notes-sidebar {
+    padding: var(--spacing-xl);
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  .clock,
+  .notes-sidebar,
+  .signature {
+    display: none;
+  }
+
+  .calendar-container {
+    display: block;
+  }
+
+  .calendar-card {
+    background: white;
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+    break-inside: avoid;
+  }
+
+  .calendar-card::before {
+    display: none;
+  }
+
+  .calendar-day {
+    background: white;
+    color: black;
+    border: 1px solid #eee;
+  }
+
+  .calendar-day.other-month {
+    background: #f5f5f5;
+  }
+
+  .november .month-title,
+  .december .month-title {
+    color: black;
+    text-shadow: none;
+    animation: none;
+  }
+}
+
+/* Focus styles for accessibility */
+.notes-input:focus,
+.add-note-btn:focus,
+.note-delete:focus {
+  outline: 2px solid var(--neon-purple);
+  outline-offset: 2px;
+}
+
+/* Touch-friendly button sizing */
+.add-note-btn,
+.note-delete {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --neon-blue: #00ffff;
+    --neon-red: #ff0000;
+    --neon-green: #00ff00;
+    --neon-purple: #ff00ff;
+  }
+
+  .calendar-day {
+    border: 2px solid #000;
+  }
+
+  .notes-input {
+    border-width: 2px;
+  }
+}
